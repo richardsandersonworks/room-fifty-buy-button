@@ -1,0 +1,322 @@
+<div id='collection-component-1604657605673'></div>
+<script type="text/javascript">
+/*<![CDATA[*/
+(function () {
+  var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+    
+    if (window.ShopifyBuy) {
+      if (window.ShopifyBuy.UI) {
+        ShopifyBuyInit();
+      } else {
+        loadScript();
+      }
+    } else {
+      loadScript();
+    }
+
+    function loadScript() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = scriptURL;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+      script.onload = ShopifyBuyInit;
+    }
+
+    function ShopifyBuyInit() {
+      
+      var client = ShopifyBuy.buildClient({
+        domain: 'makeroomfifty.myshopify.com',
+        storefrontAccessToken: 'efe53f60cdcaacadf90e3323637aba4f',
+      });
+    
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('collection', {
+        id: '173815922781',
+        node: document.getElementById('collection-component-1604657605673'),
+        moneyFormat: '%C2%A3%7B%7Bamount%7D%7D',
+        options: {
+            product: {
+                events: {
+                    beforeInit: function (product) {
+                        
+                        Object.defineProperty(product, "isButton", {
+                            get: function () {
+                                return true;
+                            }
+                        })
+
+                        // Allow changing options.buttonDestination.
+                        Object.defineProperty(product, "options", {
+                            get: function () {
+                                return this.config[this.typeKey];
+                            }
+                        })
+
+                        // Open details modal or cart depending on where the click is made.
+                        var actualOnButtonClick = product.onButtonClick;
+                    
+                        product.onButtonClick = function (event, target) {
+                            event.stopImmediatePropagation();
+                            this.options.buttonDestination = target.className.indexOf(this.classes.product.button) != -1 ? "modal" : "modal";
+                            actualOnButtonClick.call(this, event, target);
+                        }
+                    }
+                },
+                buttonDestination: 'modal',
+                iframe: true,
+                layout: 'vertical',
+                width: '1024px',
+                templates: {
+                    img: '{{#data.currentImage.src}}<div class="{{data.classes.product.imgWrapper}}" data-element="product.imgWrapper"><img data-element="product.img" class="{{data.classes.product.img}}" src="{{data.currentImage.src}}" /></div>{{/data.currentImage.src}}'
+                },
+                order: [
+                    'img',
+                    'title',
+                    'price',
+                    'button',
+                ],
+                contents: {
+                    img: true,
+                    title: true,
+                    variantTitle: false,
+                    price: true,
+                    unitPrice: true,
+                    options: false,
+                    quantity: false,
+                    quantityIncrement: false,
+                    quantityDecrement: false,
+                    quantityInput: false,
+                    button: true,
+                    buttonWithQuantity: false,
+                    description: false,
+                }, 
+                isButton: true,
+                text: {
+                    button: 'Add to Cart',
+                    outOfStock: 'Out of stock',
+                    unavailable: 'Unavailable',
+                },
+                styles: {
+                    product: {
+                        'color': '#2c2a2a',
+                        'margin-left': '30px',
+                        'margin-bottom': '50px',
+                        'width': '33.33333%',
+                        'font-weight': '400',
+                        'font-size': '14px',
+                    },
+                    title: {
+                        'font-size': '18px',
+                        'line-height': '18px',
+                        'font-weight': '600',
+                        'color': '#2c2a2a',
+                    },
+                    price: {
+                        'font-size': '16px',
+                        'line-height': '14px',
+                        'font-weight': '400',
+                        'color': '#2c2a2a',
+                    },
+                    button: {
+                        'border-radius': 0,
+                        'padding': '15px 30px',
+                        'font-size': '18px',
+                        'line-height': '20px',
+                        'font-weight': '600',
+                        'color': '#f0efea',
+                        'background-color': '#2c2a2a',
+                        ':hover': {
+                            'color': '#2c2a2a',
+                            'background-color': '#f0efea'
+                        },
+                        ':focus': {
+                            'color': '#2c2a2a',
+                            'background-color': '#f0efea'
+                        },
+                    },
+                    img: {
+                        'width': '100%',
+                    }
+                },
+            },
+            cart: {
+                startOpen: false,
+                contents: {
+                    title: true,
+                    lineItems: true,
+                    footer: true,
+                    note: false,
+                    discounts: true,
+                },
+                text: {
+                    title: 'Cart',
+                    empty: 'Your cart is empty.',
+                    button: 'Checkout',
+                    total: 'Subtotal',
+                    currency: 'GBP',
+                    notice: 'Shipping and discount codes are added at checkout.',
+                    noteDescription: 'Order Notes?',
+                },
+                styles:{
+                    title: {
+                        'font-size': '18px',
+                        'line-height': '20px',
+                        'font-weight': '400',
+                        'color': '#2c2a2a',
+                    },
+                    button: {
+                        'border-radius': 0,
+                        'padding': '15px 30px',
+                        'font-size': '18px',
+                        'line-height': '20px',
+                        'font-weight': '600',
+                        'color': '#f0efea',
+                        'background-color': '#2c2a2a',
+                        ':hover': {
+                            'color': '#2c2a2a',
+                            'background-color': '#f0efea'
+                        },
+                        ':focus': {
+                            'color': '#2c2a2a',
+                            'background-color': '#f0efea'
+                        },
+                    },
+
+
+                }
+            },
+            modal: {
+                styles:{
+                    modal:{
+                        'border':'none',
+                        'border-radius':0,
+                        '@media (min-width: 500px)': {
+                            'margin': '40px auto 40px auto',
+                        }
+                        // 'background-color': '#f0efea',
+                    },
+                    close: {
+                        'top':'-5px',
+                        'color':'#2c2a2a'
+                    }
+                }
+            }, // configure the modal created by a product embed
+            productSet: {
+                contents: {
+                    products: true,
+                    pagination: true,
+                },
+                text: {
+                    nextPageButton: 'Next',
+                }
+            }, // configure a collection or set of products
+            toggle: {
+                contents: {
+                    count: true,
+                    icon: true,
+                    title: false,
+                },
+                styles: {
+                    toggle: {
+                        'border-radius': 0,
+                        'padding': '15px 30px',
+                        'font-size': '18px',
+                        'line-height': '20px',
+                        'font-weight': '600',
+                        'color': '#f0efea',
+                        'background-color': '#2c2a2a',
+                        ':hover': {
+                            'color': '#f0efea',
+                            'background-color': '#000'
+                        },
+                        ':focus': {
+                            'color': '#f0efea',
+                            'background-color': '#000'
+                        },
+
+                    },
+                    iconPath: {
+                        'fill':'#f0efea',
+                    }
+                }
+            }, // configure the tab that toggles the cart open
+            modalProduct: {
+                width: '1024px',
+                layout: 'vertical',
+                templates: {
+                    img: '{{#data.currentImage.src}}<div class="{{data.classes.product.imgWrapper}}" data-element="product.imgWrapper"><img data-element="product.img" class="{{data.classes.product.img}}" src="{{data.currentImage.src}}" /></div>{{/data.currentImage.src}}'
+                },
+                contents: {
+                    img: false,
+                    imgWithCarousel: true,
+                    title: true,
+                    variantTitle: false,
+                    price: true,
+                    options: true,
+                    quantity: true,
+                    quantityIncrement: true,
+                    quantityDecrement: true,
+                    quantityInput: true,
+                    button: true,
+                    buttonWithQuantity: false,
+                    description: true,
+                }, 
+                order: [
+                    'img',
+                    'imgWithCarousel',
+                    'title',
+                    'variantTitle',
+                    'price',
+                    'description',
+                    'options',
+                    'quantity',
+                    'button',
+                    'buttonWithQuantity',
+                ],
+                text: {
+                    button: 'Add to Cart',
+                    outOfStock: 'Out of stock',
+                    unavailable: 'Unavailable',
+                },
+                styles: {
+                    product: {
+                        'color': '#2c2a2a',
+                        'width': '100%',
+                    },
+                    title: {
+                        'font-size': '18px',
+                        'line-height': '20px',
+                        'font-weight': '600',
+                    },
+                    img: {
+                        'width': '100%',
+                    },
+                    button: {
+                        'font-weight': '600',
+                    },
+                    description: {
+                        'margin-bottom': '3em'
+                    }
+                }
+            }, // configure the product within the modal
+            lineItem: {
+                contents: {
+                    image: true,
+                    variantTitle: true,
+                    title: true,
+                    price: false,
+                    priceWithDiscounts: true,
+                    quantity: true,
+                    quantityIncrement: true,
+                    quantityDecrement: true,
+                    quantityInput: true,
+                },
+            }, 
+        },
+      });
+    });
+  }
+})();
+/*]]>*/
+</script>
+
